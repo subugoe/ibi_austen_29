@@ -1,0 +1,81 @@
+---
+title: "R Notebook Analyse Worthäufigkeiten in Jane Austen Romanen"
+output: github_document
+---
+
+```{r echo = FALSE}
+library(knitr)
+opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+```
+
+
+```{r}
+library(dplyr) # Funktionen für Datenmanipulation und -transformation
+library(janeaustenr) # Jane Austen Corpus
+library(tidytext) # Funktionen für Textanalysen
+library(ggplot2) # Funktionen zur Datenvisualisierung
+```
+
+Nach [Julia Silge and David Robinson: Text Mining with R. A Tidy Approach](https://www.tidytextmining.com/tfidf.html).
+
+**Das ist fett** , *das ist kursiv*
+
+### Textkorpus mit sechs Jane Austen Romanen laden
+
+```{r}
+book_words <- austen_books() %>% # 1. Corpus wird geladen
+  unnest_tokens(word, text) %>% # 2. Wörter (tokens) werden je Roman extrahiert
+  count(book, word, sort = TRUE) %>% # 3. Wörter werden je Roman gezählt und anschließend sortiert
+  ungroup() # 4. Gruppierung für Zählung wurd aufgehoben
+
+#' Gesamtzahl Wörter je Buch
+total_words <- book_words %>% 
+  group_by(book) %>% 
+  summarize(total = sum(n))
+total_words %>%
+  arrange(desc(total))
+```
+
+```{r}
+#' zum Datensatz book_word hinzufügen
+book_words <- left_join(book_words, total_words)
+
+book_words
+```
+
+## Tf-idf-Maße berechnen
+
+<https://de.wikipedia.org/wiki/Tf-idf-Ma%C3%9F>
+
+Idee des Tf-idf-Maß ist es, wichtige Wörter in einem Textcorpus zu finden, indem 
+
+- a) das Gewicht für häufig verwendete Wörter verringert (Vorkommenshäufigkeit)
+- b) und das Gewicht für Wörter erhöht wird, die in einer Sammlung oder einem Korpus von Dokumenten nicht sehr häufig verwendet werden (inverse Dokumentenhäufigkeit).
+
+Das R-Paket `tidytext` stellt mit `bind_tf_idf` eine Funktion bereit, die Tf-idf-Maße berechnet.
+
+```{r}
+book_words <- book_words %>%
+  filter(!word %in% c("churchill", "elinor")) %>%
+  bind_tf_idf(word, book, n) %>%
+  arrange(desc(tf_idf)) # sortierung nach Tf-idf-Maß absteigend
+book_words
+```
+
+### Tf-idf-Maße visualisieren
+
+```{r, fig.height=10, fig.width=9, dpi=150}
+book_words %>%
+  mutate(word = factor(word, levels = rev(unique(word)))) %>% 
+  group_by(book) %>% 
+  top_n(10) %>%
+  ungroup() %>%
+  ggplot(aes(word, tf_idf, fill = book)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = NULL, y = "tf-idf") +
+  facet_wrap(~book, ncol = 2, scales = "free") +
+  coord_flip() +
+  theme_minimal()
+```
+
+

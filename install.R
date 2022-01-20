@@ -1,3 +1,3 @@
 install.packages(c(
-  "remotes", "dplyr", "janeaustenr", "gpplot2", "tidytext", "knitr", "rmarkdown"
+  "remotes", "dplyr", "janeaustenr", "ggplot2", "tidytext", "knitr", "rmarkdown"
 ))

@@ -1,8 +1,6 @@
 R Notebook Analyse Worthäufigkeiten in Jane Austen Romanen
 ================
 
-    ## Warning: package 'knitr' was built under R version 4.1.1
-
 ``` r
 library(dplyr) # Funktionen für Datenmanipulation und -transformation
 library(janeaustenr) # Jane Austen Corpus
@@ -82,26 +80,25 @@ die Tf-idf-Maße berechnet.
 
 ``` r
 book_words <- book_words %>%
-  filter(!word %in% c("churchill", "elinor")) %>%
   bind_tf_idf(word, book, n) %>%
   arrange(desc(tf_idf)) # sortierung nach Tf-idf-Maß absteigend
 book_words
 ```
 
-    ## # A tibble: 40,377 × 7
+    ## # A tibble: 40,379 × 7
     ##    book                word          n  total      tf   idf  tf_idf
     ##    <fct>               <chr>     <int>  <int>   <dbl> <dbl>   <dbl>
-    ##  1 Sense & Sensibility marianne    492 119957 0.00412  1.79 0.00739
-    ##  2 Mansfield Park      crawford    493 160460 0.00307  1.79 0.00551
-    ##  3 Pride & Prejudice   darcy       373 122204 0.00305  1.79 0.00547
-    ##  4 Persuasion          elliot      254  83658 0.00304  1.79 0.00544
-    ##  5 Emma                emma        786 160996 0.00489  1.10 0.00537
-    ##  6 Northanger Abbey    tilney      196  77780 0.00252  1.79 0.00452
-    ##  7 Emma                weston      389 160996 0.00242  1.79 0.00433
-    ##  8 Pride & Prejudice   bennet      294 122204 0.00241  1.79 0.00431
-    ##  9 Persuasion          wentworth   191  83658 0.00228  1.79 0.00409
-    ## 10 Mansfield Park      edmund      364 160460 0.00227  1.79 0.00406
-    ## # … with 40,367 more rows
+    ##  1 Sense & Sensibility elinor      623 119957 0.00519  1.79 0.00931
+    ##  2 Sense & Sensibility marianne    492 119957 0.00410  1.79 0.00735
+    ##  3 Mansfield Park      crawford    493 160460 0.00307  1.79 0.00551
+    ##  4 Pride & Prejudice   darcy       373 122204 0.00305  1.79 0.00547
+    ##  5 Persuasion          elliot      254  83658 0.00304  1.79 0.00544
+    ##  6 Emma                emma        786 160996 0.00488  1.10 0.00536
+    ##  7 Northanger Abbey    tilney      196  77780 0.00252  1.79 0.00452
+    ##  8 Emma                weston      389 160996 0.00242  1.79 0.00433
+    ##  9 Pride & Prejudice   bennet      294 122204 0.00241  1.79 0.00431
+    ## 10 Persuasion          wentworth   191  83658 0.00228  1.79 0.00409
+    ## # … with 40,369 more rows
 
 ### Tf-idf-Maße visualisieren
 

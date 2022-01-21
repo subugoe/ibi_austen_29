@@ -56,7 +56,6 @@ Das R-Paket `tidytext` stellt mit `bind_tf_idf` eine Funktion bereit, die Tf-idf
 
 ```{r}
 book_words <- book_words %>%
-  filter(!word %in% c("churchill", "elinor")) %>%
   bind_tf_idf(word, book, n) %>%
   arrange(desc(tf_idf)) # sortierung nach Tf-idf-Maß absteigend
 book_words

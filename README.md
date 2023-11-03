@@ -1,4 +1,4 @@
-### Praxismodul M27 IBI HU
+### Praxismodul M28 IBI HU
 
 Übung im Rahmen des Moduls Digital Humanities / Digital Science des [Weiterbildende Masterstudiengang Bibliotheks- und Informationswissenschaft im Fernstudium am IBI der HU Berlin](https://moodle.hu-berlin.de/enrol/index.php?id=114067).
 
